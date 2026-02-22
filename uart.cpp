@@ -38,7 +38,7 @@ public:
         if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
             return false;
         }
-        tcflush(serial_port, TCIFLUSH);
+        // tcflush(serial_port, TCIFLUSH);
         return true;
     }
 
