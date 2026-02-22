@@ -69,7 +69,7 @@ public:
                 if (chBuf[i] == '\n') {
                     std::cout << "[Recieved] " << buffer << std::endl;
                     buffer.clear();
-                } else {
+                } else if (chBuf[i] != '\r'){
                     buffer += chBuf[i];
                 }
             }
