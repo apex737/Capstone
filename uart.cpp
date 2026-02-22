@@ -23,6 +23,7 @@ public:
         }
 
         // 3. 통신 파라미터 설정 (매우 길다..!)
+        /*
         tty.c_cflag &= ~PARENB;        // 패리티 비트 없음
         tty.c_cflag &= ~CSTOPB;        // 정지 비트 1개
         tty.c_cflag &= ~CSIZE;
@@ -30,12 +31,14 @@ public:
         tty.c_cflag &= ~CRTSCTS;       // 하드웨어 흐름제어 비활성화
         tty.c_cflag |= CREAD | CLOCAL; // 수신 활성화, 로컬 모드
         tty.c_lflag &= ~ECHO;          // 터미널 에코(Echo) 끄기
-        tty.c_iflag &= ~(IXON | IXOFF | IXANY); // 소프트웨어 흐름제어 비활성화
+        tty.c_iflag &= ~IXON           // 소프트웨어 흐름제어 비활성화
         tty.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL); // 특수문자 변환 끄기
         tty.c_oflag &= ~OPOST; // 출력 처리 끄기
-
+        
+        */
+        cfmakeraw(&tty); // 위의 디폴트 설정을 한번에 적용
         tty.c_cc[VMIN] = 0;   // 최소 읽기 문자 수 (0이면 즉시 반환)
-        tty.c_cc[VTIME] = 10; // 타임아웃 1초 (10 * 0.1초)
+        tty.c_cc[VTIME] = 10; // 타임아웃 1초 (10 * 0.1초) 
 
         // 4. 속도(Baud rate) 설정
         cfsetispeed(&tty, baudrate);
@@ -83,9 +86,7 @@ public:
 
 int main() {
     RaspberryUart uart;
-    
-    /*  /dev/serial0 -> ttyAMA0 (GPIO UART)
-        /dev/serial1 -> ttyS0   (BLE UART) */
+
     if (uart.begin("/dev/serial0", B115200)) {
         std::cout << "UART 시작!" << std::endl;
         
