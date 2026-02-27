@@ -28,7 +28,7 @@ void calibrate_gyro(int fd, MPUData& mpu)
     int samples = 200;
 
     for(int i = 0; i < samples; i++) {
-        mpu_read_all(fd, mpu);
+        mpu_get_value(fd, mpu);
         sumX += mpu.gx; sumY += mpu.gy; sumZ += mpu.gz;
         usleep(5000); // 200Hz 샘플링
     }
