@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
+#include <linux/i2c.h>
 #include <unistd.h>
 
 typedef struct {
