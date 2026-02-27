@@ -53,27 +53,24 @@ int mpu_init(int fd, MPUData& mpu)
 {
     // 1. 연결 확인 (WHO_AM_I)
     if (mpu_read_reg(fd, WHO_AM_I) != DEV_ID)
-        error_handler("WHO_AM_I");
+        error_handler("Device connection failed");
     
     // 2. Wake & 클럭 설정
     mpu_write_reg(fd, PWR_MGMT_1, CLKSEL_PLL_XGYRO);
 
-    // 3. 필터 설정 
-    // 0x03: DLPF를 42Hz~44Hz로 설정 (진동 노이즈 제거)
-    mpu_write_reg(fd, CONFIG, DLPF_BW_42);
+    uint8_t burst_data[5] = {
+        SMPLRT_DIV,             // 레지스터 시작주소
+        SAMPLE_RATE_1000HZ,     // SMPLRT_DIV (1000Hz)
+        DLPF_BW_42,             // CONFIG (DLPF 42Hz)
+        GYRO_FS_500,            // GYRO_CONFIG (500dps)
+        ACCEL_FS_8              // ACCEL_CONFIG (8g)
+    };
 
-    // 4. 샘플링 속도 설정
-    mpu_write_reg(fd, SMPLRT_DIV, SAMPLE_RATE_1000HZ);
-
-    // 5. 자이로 범위 설정 
-    mpu_write_reg(fd, GYRO_CONFIG, GYRO_FS_500);
-
-    // 6. 가속도 범위 설정 
-    mpu_write_reg(fd, ACCEL_CONFIG, ACCEL_FS_8);
+    if (write(fd, burst_data, 5) != 5) 
+        error_handler("Burst Write Failed");
 
     usleep(100000); // 리셋 후 안정화 대기 (100ms)
     calibrate_gyro(fd, mpu);
-
 
     return 0;
 }
