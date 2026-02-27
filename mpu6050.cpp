@@ -1,5 +1,11 @@
 #include "mpu6050.h"
 
+/* 드라이버 구현
+1. 레지스터맵 xRM.h 생성
+2. init(conf/전처리), read, write 작성
+3. 후처리 (Scaling & Auto-Calibration) 
+4. 예외처리          */
+
 void error_handler(const char* msg)
 {
     perror(msg);
