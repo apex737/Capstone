@@ -52,7 +52,7 @@ void calibrate_gyro(int fd, MPUData& mpu)
 int mpu_init(int fd, MPUData& mpu) 
 {
     // 1. 연결 확인 (WHO_AM_I)
-    if (mpu_read_reg(fd, WHO_AM_I) != DEV_ID)
+    if (mpu_read_reg(fd, WHO_AM_I) != WHO_AM_I_VAL)
         error_handler("Device connection failed");
     
     // 2. Wake & 클럭 설정
@@ -83,17 +83,9 @@ int mpu_read_all(int fd, MPUData &mpu) {
     struct i2c_msg msgs[2];
     struct i2c_rdwr_ioctl_data msgset;
 
-    // 첫 번째 메시지: 읽을 레지스터 주소 쓰기 (Write)
-    msgs[0].addr = 0x68;
-    msgs[0].flags = 0;       // Write
-    msgs[0].len = 1;
-    msgs[0].buf = &reg;
-
-    // 두 번째 메시지: 14바이트 읽기 (Read)
-    msgs[1].addr = 0x68;
-    msgs[1].flags = 1;      // Read
-    msgs[1].len = 14;
-    msgs[1].buf = buf;
+    // 첫 번째 메시지: 
+    msgs[0] = {DEV_ADDR, 0, 1, &reg}; // 읽을 레지스터 주소 Write
+    msgs[1] = {DEV_ADDR, 1, 14, buf}; // Burst Read 
 
     msgset = {msgs, 2};
 

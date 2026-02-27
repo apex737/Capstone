@@ -6,7 +6,7 @@
 #define POWER_OFF            0x01
 #define INTR_ON              0x01
 #define INTR_OFF             0x00
-#define DEV_ID               0x98
+#define DEV_ADDR             0x68
 
 // Self Test Registers
 #define SELF_TEST_X          0x0D
@@ -111,6 +111,8 @@
 #define FIFO_COUNT_L         0x73
 #define FIFO_R_W             0x74
 #define WHO_AM_I             0x75
+#define WHO_AM_I_VAL         0x98
+
 
 
 // --- [필수 및 권장 설정 비트 정의] ---
