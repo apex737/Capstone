@@ -24,7 +24,7 @@ uint8_t mpu_read_reg(int fd, uint8_t reg)
 void calibrate_gyro(int fd, MPUData& mpu) 
 {
     float sumX = 0, sumY = 0, sumZ = 0;
-    int samples = 100;
+    int samples = 200;
 
     for(int i = 0; i < samples; i++) {
         mpu_read_all(fd, mpu);
@@ -44,9 +44,6 @@ int mpu_init(int fd, MPUData& mpu)
     if (mpu_read_reg(fd, WHO_AM_I) != DEV_ID)
         error_handler("WHO_AM_I");
     
-    usleep(100000); // 리셋 후 안정화 대기 (100ms)
-    calibrate_gyro(fd, mpu);
-
     // 2. Wake & 클럭 설정
     mpu_write_reg(fd, PWR_MGMT_1, CLKSEL_PLL_XGYRO);
 
@@ -63,6 +60,10 @@ int mpu_init(int fd, MPUData& mpu)
     // 6. 가속도 범위 설정 
     mpu_write_reg(fd, ACCEL_CONFIG, ACCEL_FS_8);
 
+    usleep(100000); // 리셋 후 안정화 대기 (100ms)
+    calibrate_gyro(fd, mpu);
+
+
     return 0;
 }
 
@@ -71,12 +72,11 @@ int mpu_init(int fd, MPUData& mpu)
 int mpu_read_all(int fd, MPUData &mpu)
 {
     uint8_t buf[14];
-    uint8_t reg = ACCEL_XOUT_H; // 0x3B [cite: 614]
+    uint8_t reg = ACCEL_XOUT_H; 
 
     if (write(fd, &reg, 1) != 1) return -1;
     if (read(fd, buf, 14) != 14) return -1;
 
-    // 핵심: (int16_t)로 먼저 묶어서 부호를 살린 뒤 float으로 나눕니다. 
     mpu.ax = (float)((int16_t)((buf[0] << 8) | buf[1])) / ACCEL_LSB_8G;
     mpu.ay = (float)((int16_t)((buf[2] << 8) | buf[3])) / ACCEL_LSB_8G;
     mpu.az = (float)((int16_t)((buf[4] << 8) | buf[5])) / ACCEL_LSB_8G;
