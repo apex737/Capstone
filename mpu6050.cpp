@@ -94,15 +94,14 @@ int mpu_read_all(int fd, MPUData &mpu) {
 
     // 두 번째 메시지: 14바이트 읽기 (Read)
     msgs[1].addr = 0x68;
-    msgs[1].flags = I2C_M_RD; // Read
+    msgs[1].flags = 1;      // Read
     msgs[1].len = 14;
     msgs[1].buf = buf;
 
     msgset = {msgs, 2};
-    // 단 한 번의 호출로 쓰기+읽기를 원자적으로 수행
-    if (ioctl(fd, I2C_RDWR, &msgset) < 0) {
-        return -1; 
-    }
+
+    if (ioctl(fd, I2C_RDWR, &msgset) < 0) 
+        error_handler("mpu_read_all");
     
     mpu.ax = (float)((int16_t)((buf[0] << 8) | buf[1])) / ACCEL_LSB_8G;
     mpu.ay = (float)((int16_t)((buf[2] << 8) | buf[3])) / ACCEL_LSB_8G;
@@ -114,27 +113,6 @@ int mpu_read_all(int fd, MPUData &mpu) {
 
     return 0;
 }
-
-
-// 자이로, 가속도 값 가져오기
-// int mpu_read_all(int fd, MPUData &mpu)
-// {
-//     uint8_t buf[14];
-//     uint8_t reg = ACCEL_XOUT_H; 
-
-//     if (write(fd, &reg, 1) != 1) return -1;
-//     if (read(fd, buf, 14) != 14) return -1;
-
-//     mpu.ax = (float)((int16_t)((buf[0] << 8) | buf[1])) / ACCEL_LSB_8G;
-//     mpu.ay = (float)((int16_t)((buf[2] << 8) | buf[3])) / ACCEL_LSB_8G;
-//     mpu.az = (float)((int16_t)((buf[4] << 8) | buf[5])) / ACCEL_LSB_8G;
-    
-//     mpu.gx = (float)((int16_t)((buf[8] << 8) | buf[9])) / GYRO_LSB_500 - mpu.gx_ofs;
-//     mpu.gy = (float)((int16_t)((buf[10] << 8) | buf[11])) / GYRO_LSB_500 - mpu.gy_ofs;
-//     mpu.gz = (float)((int16_t)((buf[12] << 8) | buf[13])) / GYRO_LSB_500 - mpu.gz_ofs;
-
-//     return 0;
-// }
 
 void mpu_print_all(MPUData& mpu)
 {
