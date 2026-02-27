@@ -10,7 +10,7 @@ int main() {
         error_handler("open");
 
     // 2. 슬레이브 주소 설정 (0x68)
-    if (ioctl(file, I2C_SLAVE, 0x98) < 0)
+    if (ioctl(file, I2C_SLAVE, 0x68) < 0)
         error_handler("ioctl");
 
     MPUData mpu = {0};
