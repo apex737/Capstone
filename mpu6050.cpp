@@ -1,15 +1,14 @@
 #include "mpu6050.h"
 
-/* 드라이버 기본 구현
-1. 레지스터맵 xRM.h 생성
+/* 드라이버 구현
+------------  기본 -------------
+1. xRM.h 생성
 2. init(conf/전처리), read, write 작성
-3. 후처리 (Scaling & Auto-Calibration) 
-4. 예외처리          */
-
-/* 드라이버 심화 구현
-1. 에러 핸들링 강화
-2. 성능 향상 (Interrupt & FIFO)
-3. 가상함수/상속 (유지보수성; OOP/HAL) */
+3. 후처리 ((Scaling & Auto-Calibration) 
+------------  심화 -------------
+4. 예외처리 (Graceful Reset)
+5. 성능 최적화 (Interrupt & FIFO)
+6. 가상함수/상속 (유지보수성; OOP/HAL) */
 
 void error_handler(const char* msg)
 {
