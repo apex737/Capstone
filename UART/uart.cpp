@@ -85,7 +85,7 @@ public:
 int main() {
     RaspberryUart uart;
 
-    if (uart.begin("/dev/serial0", B115200)) {
+    if (uart.begin("/dev/ttyAMA2", B115200)) {
         std::cout << "UART 시작!" << std::endl;
         
         while (true) {
