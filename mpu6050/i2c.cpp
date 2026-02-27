@@ -17,7 +17,7 @@ int main() {
     mpu_init(file, mpu);
     while(1)
     {
-        if(mpu_read_all(file, mpu) < 0) continue;
+        if(mpu_get_value(file, mpu) < 0) continue;
         mpu_print_all(mpu);
         sleep(1);
     }

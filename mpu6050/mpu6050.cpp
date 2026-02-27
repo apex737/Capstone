@@ -66,7 +66,7 @@ int mpu_init(int fd, MPUData& mpu)
 }
 
 
-int mpu_read_all(int fd, MPUData &mpu) {
+int mpu_get_value(int fd, MPUData &mpu) {
     uint8_t reg = ACCEL_XOUT_H;
     uint8_t buf[14];
 
