@@ -7,7 +7,7 @@
 3. 후처리 ((Scaling & Auto-Calibration) 
 ------------  심화 -------------
 4. 예외처리 (Graceful Reset)
-5. 성능 최적화 (Interrupt & FIFO)
+5. 성능 최적화 (Interrupt + FIFO; DMA LIKE)
 6. 가상함수/상속 (유지보수성; OOP/HAL) */
 
 void error_handler(const char* msg)
