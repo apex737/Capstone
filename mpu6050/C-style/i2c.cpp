@@ -1,4 +1,3 @@
-
 #include "mpu6050.h"
 
 int main() {
@@ -10,7 +9,7 @@ int main() {
         error_handler("open");
 
     // 2. 슬레이브 주소 설정 (0x68)
-    if (ioctl(file, I2C_SLAVE, 0x68) < 0)
+    if (ioctl(file, I2C_SLAVE, DEV_ADDR) < 0)
         error_handler("ioctl");
 
     MPUData mpu = {0};

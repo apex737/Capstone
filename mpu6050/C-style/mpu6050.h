@@ -1,6 +1,6 @@
 #ifndef MPU6050_H
 #define MPU6050_H
-#include "mpu6050RM.h"
+#include "../mpu6050RM.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
